@@ -4,13 +4,17 @@ Laravel portfolio project for a B2B vehicle rental company. The application will
 
 ## Current Milestone
 
-Milestone 0: Laravel project setup.
+Milestone 1: Authentication and role-based dashboard layout.
 
 - Laravel 12 application scaffolded.
 - Laravel Breeze Blade authentication installed.
 - Tailwind/Vite frontend build configured.
 - SQLite local database prepared for quick development.
 - Base migrations can run successfully.
+- Public registration disabled for internal CRM usage.
+- User role enum and role middleware added.
+- Role-based dashboard shell with sidebar/topbar added.
+- Demo users can be seeded.
 
 ## Tech Stack
 
@@ -29,6 +33,7 @@ composer install
 cp .env.example .env
 php artisan key:generate
 php artisan migrate
+php artisan db:seed
 npm install
 npm run build
 php artisan serve
@@ -39,6 +44,17 @@ For active frontend development, run:
 ```bash
 npm run dev
 ```
+
+## Demo Accounts
+
+All demo accounts use the password `password`.
+
+| Role | Email |
+| --- | --- |
+| Admin | admin@example.com |
+| Sales | sales@example.com |
+| Sales Manager | manager@example.com |
+| Finance | finance@example.com |
 
 ## Development Approach
 
