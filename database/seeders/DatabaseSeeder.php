@@ -30,6 +30,7 @@ class DatabaseSeeder extends Seeder
                 [
                     'name' => $user['name'],
                     'role' => $user['role'],
+                    'is_active' => true,
                     'email_verified_at' => now(),
                     'password' => Hash::make('password'),
                 ],

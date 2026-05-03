@@ -24,7 +24,7 @@
                 ['label' => 'Vehicles', 'href' => '#', 'active' => false, 'enabled' => false, 'roles' => ['admin', 'manager', 'finance']],
                 ['label' => 'Rental Packages', 'href' => '#', 'active' => false, 'enabled' => false, 'roles' => ['admin', 'manager', 'finance']],
                 ['label' => 'Reports', 'href' => '#', 'active' => false, 'enabled' => false, 'roles' => ['admin', 'manager', 'finance']],
-                ['label' => 'Users', 'href' => '#', 'active' => false, 'enabled' => false, 'roles' => ['admin']],
+                ['label' => 'Users', 'href' => route('users.index'), 'active' => request()->routeIs('users.*'), 'enabled' => true, 'roles' => ['admin']],
                 ['label' => 'Audit Logs', 'href' => '#', 'active' => false, 'enabled' => false, 'roles' => ['admin', 'manager']],
             ];
         @endphp
@@ -115,6 +115,18 @@
                 </header>
 
                 <main class="px-4 py-6 sm:px-6 lg:px-8">
+                    @if (session('status'))
+                        <div class="mb-6 rounded-lg border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm font-medium text-emerald-800">
+                            {{ session('status') }}
+                        </div>
+                    @endif
+
+                    @if (session('error'))
+                        <div class="mb-6 rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-sm font-medium text-red-800">
+                            {{ session('error') }}
+                        </div>
+                    @endif
+
                     {{ $slot }}
                 </main>
             </div>
