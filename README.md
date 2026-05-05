@@ -4,7 +4,7 @@ Laravel portfolio project for a B2B vehicle rental company. The application will
 
 ## Current Milestone
 
-Milestone 2: User management.
+Milestone 3: Prospect and contact management.
 
 - Laravel 12 application scaffolded.
 - Laravel Breeze Blade authentication installed.
@@ -18,6 +18,10 @@ Milestone 2: User management.
 - Admin-only user management added.
 - Admin can create, edit, filter, and activate/deactivate users.
 - Inactive users cannot sign in.
+- Prospect CRUD with search/filter/pagination added.
+- Prospect detail page includes company profile, pipeline status, sales owner, and PIC contacts.
+- Admin/Sales can manage prospects and contacts; Manager/Finance can view prospects.
+- Primary PIC rule keeps only one primary contact per prospect.
 
 ## Tech Stack
 
