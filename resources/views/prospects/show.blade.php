@@ -205,5 +205,128 @@
                 </table>
             </div>
         </section>
+
+        <div class="grid gap-6 xl:grid-cols-[1fr_420px]">
+            <section class="rounded-lg border border-neutral-200 bg-white shadow-sm">
+                <div class="border-b border-neutral-200 px-5 py-4">
+                    <h2 class="text-base font-semibold text-neutral-950">Follow-up Timeline</h2>
+                </div>
+
+                <div class="divide-y divide-neutral-100">
+                    @forelse ($prospect->followUpActivities as $activity)
+                        <div class="px-5 py-4">
+                            <div class="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
+                                <div>
+                                    <div class="flex flex-wrap items-center gap-2">
+                                        <span class="rounded-full bg-neutral-100 px-2.5 py-1 text-xs font-semibold text-neutral-700">{{ str($activity->activity_type)->replace('_', ' ')->headline() }}</span>
+                                        @if ($activity->outcome)
+                                            <span class="rounded-full bg-sky-50 px-2.5 py-1 text-xs font-semibold text-sky-700">{{ str($activity->outcome)->replace('_', ' ')->headline() }}</span>
+                                        @endif
+                                    </div>
+                                    <div class="mt-2 font-medium text-neutral-950">{{ $activity->summary }}</div>
+                                    <div class="mt-1 text-sm text-neutral-500">
+                                        {{ $activity->activity_date->format('d M Y H:i') }} by {{ $activity->user?->name ?? 'Unknown' }}
+                                        @if ($activity->contact)
+                                            · {{ $activity->contact->name }}
+                                        @endif
+                                    </div>
+                                    @if ($activity->detail)
+                                        <p class="mt-3 whitespace-pre-line text-sm text-neutral-700">{{ $activity->detail }}</p>
+                                    @endif
+                                    @if ($activity->next_follow_up_at)
+                                        <div class="mt-3 text-sm font-medium text-amber-700">Next: {{ $activity->next_follow_up_at->format('d M Y H:i') }}</div>
+                                    @endif
+                                </div>
+
+                                @if ($canManage && (auth()->user()->hasRole(\App\Enums\UserRole::Admin) || auth()->id() === $activity->user_id))
+                                    <div class="flex shrink-0 gap-2">
+                                        <a href="{{ route('prospects.follow-ups.edit', [$prospect, $activity]) }}" class="rounded-lg border border-neutral-200 px-3 py-1.5 text-sm font-medium text-neutral-700 transition hover:bg-neutral-50">Edit</a>
+                                        <form method="POST" action="{{ route('prospects.follow-ups.destroy', [$prospect, $activity]) }}" onsubmit="return confirm('Delete this follow-up?')">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button type="submit" class="rounded-lg border border-red-200 px-3 py-1.5 text-sm font-medium text-red-700 transition hover:bg-red-50">Delete</button>
+                                        </form>
+                                    </div>
+                                @endif
+                            </div>
+                        </div>
+                    @empty
+                        <div class="px-5 py-10 text-center text-sm text-neutral-500">No follow-up activity recorded yet.</div>
+                    @endforelse
+                </div>
+            </section>
+
+            <section class="rounded-lg border border-neutral-200 bg-white shadow-sm">
+                <div class="border-b border-neutral-200 px-5 py-4">
+                    <h2 class="text-base font-semibold text-neutral-950">Add Follow-up</h2>
+                </div>
+
+                @if ($canManage)
+                    <form method="POST" action="{{ route('prospects.follow-ups.store', $prospect) }}" class="space-y-4 p-5">
+                        @csrf
+                        <div>
+                            <x-input-label for="activity_type" value="Activity Type" />
+                            <select id="activity_type" name="activity_type" class="mt-1 block w-full rounded-md border-neutral-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500" required>
+                                @foreach (\App\Models\FollowUpActivity::TYPES as $type)
+                                    <option value="{{ $type }}" @selected(old('activity_type') === $type)>{{ str($type)->replace('_', ' ')->headline() }}</option>
+                                @endforeach
+                            </select>
+                            <x-input-error class="mt-2" :messages="$errors->get('activity_type')" />
+                        </div>
+
+                        <div>
+                            <x-input-label for="contact_id" value="Related PIC" />
+                            <select id="contact_id" name="contact_id" class="mt-1 block w-full rounded-md border-neutral-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500">
+                                <option value="">No specific PIC</option>
+                                @foreach ($prospect->contacts as $contact)
+                                    <option value="{{ $contact->id }}" @selected((string) old('contact_id') === (string) $contact->id)>{{ $contact->name }}</option>
+                                @endforeach
+                            </select>
+                            <x-input-error class="mt-2" :messages="$errors->get('contact_id')" />
+                        </div>
+
+                        <div>
+                            <x-input-label for="activity_date" value="Activity Date" />
+                            <x-text-input id="activity_date" name="activity_date" type="datetime-local" class="mt-1 block w-full" :value="old('activity_date', now()->format('Y-m-d\\TH:i'))" required />
+                            <x-input-error class="mt-2" :messages="$errors->get('activity_date')" />
+                        </div>
+
+                        <div>
+                            <x-input-label for="summary" value="Summary" />
+                            <x-text-input id="summary" name="summary" type="text" class="mt-1 block w-full" :value="old('summary')" required />
+                            <x-input-error class="mt-2" :messages="$errors->get('summary')" />
+                        </div>
+
+                        <div>
+                            <x-input-label for="detail" value="Detail" />
+                            <textarea id="detail" name="detail" rows="3" class="mt-1 block w-full rounded-md border-neutral-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500">{{ old('detail') }}</textarea>
+                            <x-input-error class="mt-2" :messages="$errors->get('detail')" />
+                        </div>
+
+                        <div>
+                            <x-input-label for="next_follow_up_at" value="Next Follow-up" />
+                            <x-text-input id="next_follow_up_at" name="next_follow_up_at" type="datetime-local" class="mt-1 block w-full" :value="old('next_follow_up_at')" />
+                            <x-input-error class="mt-2" :messages="$errors->get('next_follow_up_at')" />
+                        </div>
+
+                        <div>
+                            <x-input-label for="outcome" value="Outcome" />
+                            <select id="outcome" name="outcome" class="mt-1 block w-full rounded-md border-neutral-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500">
+                                <option value="">No outcome yet</option>
+                                @foreach (\App\Models\FollowUpActivity::OUTCOMES as $outcome)
+                                    <option value="{{ $outcome }}" @selected(old('outcome') === $outcome)>{{ str($outcome)->replace('_', ' ')->headline() }}</option>
+                                @endforeach
+                            </select>
+                            <x-input-error class="mt-2" :messages="$errors->get('outcome')" />
+                        </div>
+
+                        <x-input-error class="mt-2" :messages="$errors->get('prospect_id')" />
+                        <button type="submit" class="w-full rounded-lg bg-neutral-950 px-4 py-2 text-sm font-semibold text-white transition hover:bg-neutral-800">Add follow-up</button>
+                    </form>
+                @else
+                    <div class="p-5 text-sm text-neutral-500">Follow-up management is available for Admin and Sales.</div>
+                @endif
+            </section>
+        </div>
     </div>
 </x-app-layout>
