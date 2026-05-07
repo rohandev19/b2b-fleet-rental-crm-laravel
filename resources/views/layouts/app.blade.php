@@ -19,7 +19,7 @@
                 ['label' => 'Dashboard', 'href' => route('dashboard'), 'active' => request()->routeIs('dashboard'), 'enabled' => true, 'roles' => ['admin', 'sales', 'manager', 'finance']],
                 ['label' => 'Prospects', 'href' => route('prospects.index'), 'active' => request()->routeIs('prospects.*'), 'enabled' => true, 'roles' => ['admin', 'sales', 'manager', 'finance']],
                 ['label' => 'Pipeline', 'href' => '#', 'active' => false, 'enabled' => false, 'roles' => ['admin', 'sales', 'manager']],
-                ['label' => 'Follow-ups', 'href' => '#', 'active' => false, 'enabled' => false, 'roles' => ['admin', 'sales', 'manager']],
+                ['label' => 'Follow-ups', 'href' => route('follow-ups.today'), 'active' => request()->routeIs('follow-ups.*'), 'enabled' => true, 'roles' => ['admin', 'sales', 'manager']],
                 ['label' => 'Quotations', 'href' => '#', 'active' => false, 'enabled' => false, 'roles' => ['admin', 'sales', 'manager', 'finance']],
                 ['label' => 'Vehicles', 'href' => '#', 'active' => false, 'enabled' => false, 'roles' => ['admin', 'manager', 'finance']],
                 ['label' => 'Rental Packages', 'href' => '#', 'active' => false, 'enabled' => false, 'roles' => ['admin', 'manager', 'finance']],

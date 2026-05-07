@@ -66,7 +66,11 @@ class ProspectController extends Controller
 
     public function show(Prospect $prospect): View
     {
-        $prospect->load(['assignedSales', 'contacts' => fn ($query) => $query->latest()]);
+        $prospect->load([
+            'assignedSales',
+            'contacts' => fn ($query) => $query->latest(),
+            'followUpActivities' => fn ($query) => $query->with(['contact', 'user'])->latest('activity_date'),
+        ]);
 
         return view('prospects.show', [
             'prospect' => $prospect,
