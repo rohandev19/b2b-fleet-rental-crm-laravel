@@ -5,7 +5,9 @@ use App\Http\Controllers\FollowUpActivityController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ProspectContactController;
 use App\Http\Controllers\ProspectController;
+use App\Http\Controllers\RentalPackageController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\VehicleController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -28,6 +30,23 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
     Route::patch('/users/{user}/toggle-active', [UserController::class, 'toggleActive'])
         ->name('users.toggle-active');
     Route::resource('users', UserController::class)->except(['show', 'destroy']);
+
+    Route::get('/vehicles/create', [VehicleController::class, 'create'])->name('vehicles.create');
+    Route::post('/vehicles', [VehicleController::class, 'store'])->name('vehicles.store');
+    Route::get('/vehicles/{vehicle}/edit', [VehicleController::class, 'edit'])->name('vehicles.edit');
+    Route::put('/vehicles/{vehicle}', [VehicleController::class, 'update'])->name('vehicles.update');
+    Route::patch('/vehicles/{vehicle}/toggle-active', [VehicleController::class, 'toggleActive'])->name('vehicles.toggle-active');
+
+    Route::get('/rental-packages/create', [RentalPackageController::class, 'create'])->name('rental-packages.create');
+    Route::post('/rental-packages', [RentalPackageController::class, 'store'])->name('rental-packages.store');
+    Route::get('/rental-packages/{rentalPackage}/edit', [RentalPackageController::class, 'edit'])->name('rental-packages.edit');
+    Route::put('/rental-packages/{rentalPackage}', [RentalPackageController::class, 'update'])->name('rental-packages.update');
+    Route::patch('/rental-packages/{rentalPackage}/toggle-active', [RentalPackageController::class, 'toggleActive'])->name('rental-packages.toggle-active');
+});
+
+Route::middleware(['auth', 'role:admin,manager,finance'])->group(function () {
+    Route::get('/vehicles', [VehicleController::class, 'index'])->name('vehicles.index');
+    Route::get('/rental-packages', [RentalPackageController::class, 'index'])->name('rental-packages.index');
 });
 
 Route::middleware(['auth', 'role:admin,sales,manager,finance'])->group(function () {

@@ -4,7 +4,7 @@ Laravel portfolio project for a B2B vehicle rental company. The application will
 
 ## Current Milestone
 
-Milestone 4: Follow-up activity tracking.
+Milestone 5: Vehicle and rental package masters.
 
 - Laravel 12 application scaffolded.
 - Laravel Breeze Blade authentication installed.
@@ -26,6 +26,9 @@ Milestone 4: Follow-up activity tracking.
 - Admin/Sales can add, edit, and delete follow-up activities.
 - Today and overdue follow-up reminder pages added.
 - Lost prospects reject new follow-up activities.
+- Vehicle master CRUD added with type, transmission, fuel, seat capacity, base monthly price, and active status.
+- Rental package CRUD added with duration and included services.
+- Admin can manage master data; Manager/Finance can view master data.
 
 ## Tech Stack
 
