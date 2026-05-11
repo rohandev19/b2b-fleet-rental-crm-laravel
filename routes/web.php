@@ -5,6 +5,7 @@ use App\Http\Controllers\FollowUpActivityController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ProspectContactController;
 use App\Http\Controllers\ProspectController;
+use App\Http\Controllers\QuotationController;
 use App\Http\Controllers\RentalPackageController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\VehicleController;
@@ -73,6 +74,16 @@ Route::middleware(['auth', 'role:admin,sales'])->scopeBindings()->group(function
 
 Route::middleware(['auth', 'role:admin,sales,manager,finance'])->group(function () {
     Route::get('/prospects/{prospect}', [ProspectController::class, 'show'])->name('prospects.show');
+    Route::get('/quotations', [QuotationController::class, 'index'])->name('quotations.index');
+});
+
+Route::middleware(['auth', 'role:admin,sales'])->group(function () {
+    Route::get('/quotations/create', [QuotationController::class, 'create'])->name('quotations.create');
+    Route::post('/quotations', [QuotationController::class, 'store'])->name('quotations.store');
+});
+
+Route::middleware(['auth', 'role:admin,sales,manager,finance'])->group(function () {
+    Route::get('/quotations/{quotation}', [QuotationController::class, 'show'])->name('quotations.show');
 });
 
 Route::middleware(['auth', 'role:admin,sales,manager'])->group(function () {
