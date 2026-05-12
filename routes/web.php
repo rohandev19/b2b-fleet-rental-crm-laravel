@@ -5,6 +5,7 @@ use App\Http\Controllers\FollowUpActivityController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ProspectContactController;
 use App\Http\Controllers\ProspectController;
+use App\Http\Controllers\QuotationApprovalController;
 use App\Http\Controllers\QuotationController;
 use App\Http\Controllers\RentalPackageController;
 use App\Http\Controllers\UserController;
@@ -80,6 +81,12 @@ Route::middleware(['auth', 'role:admin,sales,manager,finance'])->group(function 
 Route::middleware(['auth', 'role:admin,sales'])->group(function () {
     Route::get('/quotations/create', [QuotationController::class, 'create'])->name('quotations.create');
     Route::post('/quotations', [QuotationController::class, 'store'])->name('quotations.store');
+    Route::post('/quotations/{quotation}/submit', [QuotationApprovalController::class, 'submit'])->name('quotations.submit');
+});
+
+Route::middleware(['auth', 'role:manager'])->group(function () {
+    Route::post('/quotations/{quotation}/approve', [QuotationApprovalController::class, 'approve'])->name('quotations.approve');
+    Route::post('/quotations/{quotation}/reject', [QuotationApprovalController::class, 'reject'])->name('quotations.reject');
 });
 
 Route::middleware(['auth', 'role:admin,sales,manager,finance'])->group(function () {
