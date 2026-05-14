@@ -4,7 +4,7 @@ Laravel portfolio project for a B2B vehicle rental company. The application will
 
 ## Current Milestone
 
-Milestone 7: Quotation approval workflow.
+Milestone 8: Approved quotation PDF generation.
 
 - Laravel 12 application scaffolded.
 - Laravel Breeze Blade authentication installed.
@@ -37,6 +37,10 @@ Milestone 7: Quotation approval workflow.
 - Manager can approve or reject submitted quotations.
 - Rejection reason is required and approval history is recorded.
 - Sales cannot approve or reject their own quotations.
+- Approved quotations can be generated into PDF using DomPDF.
+- Quotation PDFs are stored on the private local disk.
+- Admin/Sales/Manager can generate approved quotation PDFs.
+- Admin/Sales/Manager/Finance can download generated approved quotation PDFs.
 
 ## Tech Stack
 

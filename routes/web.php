@@ -7,6 +7,7 @@ use App\Http\Controllers\ProspectContactController;
 use App\Http\Controllers\ProspectController;
 use App\Http\Controllers\QuotationApprovalController;
 use App\Http\Controllers\QuotationController;
+use App\Http\Controllers\QuotationPdfController;
 use App\Http\Controllers\RentalPackageController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\VehicleController;
@@ -87,6 +88,14 @@ Route::middleware(['auth', 'role:admin,sales'])->group(function () {
 Route::middleware(['auth', 'role:manager'])->group(function () {
     Route::post('/quotations/{quotation}/approve', [QuotationApprovalController::class, 'approve'])->name('quotations.approve');
     Route::post('/quotations/{quotation}/reject', [QuotationApprovalController::class, 'reject'])->name('quotations.reject');
+});
+
+Route::middleware(['auth', 'role:admin,sales,manager'])->group(function () {
+    Route::post('/quotations/{quotation}/generate-pdf', [QuotationPdfController::class, 'generate'])->name('quotations.generate-pdf');
+});
+
+Route::middleware(['auth', 'role:admin,sales,manager,finance'])->group(function () {
+    Route::get('/quotations/{quotation}/download-pdf', [QuotationPdfController::class, 'download'])->name('quotations.download-pdf');
 });
 
 Route::middleware(['auth', 'role:admin,sales,manager,finance'])->group(function () {
