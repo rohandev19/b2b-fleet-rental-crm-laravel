@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AuditLogController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\FollowUpActivityController;
 use App\Http\Controllers\ProfileController;
@@ -107,6 +108,10 @@ Route::middleware(['auth', 'role:admin,sales,manager,finance'])->group(function 
 Route::middleware(['auth', 'role:admin,sales,manager'])->group(function () {
     Route::get('/follow-ups/today', [FollowUpActivityController::class, 'today'])->name('follow-ups.today');
     Route::get('/follow-ups/overdue', [FollowUpActivityController::class, 'overdue'])->name('follow-ups.overdue');
+});
+
+Route::middleware(['auth', 'role:admin,manager'])->group(function () {
+    Route::get('/audit-logs', [AuditLogController::class, 'index'])->name('audit-logs.index');
 });
 
 require __DIR__.'/auth.php';
