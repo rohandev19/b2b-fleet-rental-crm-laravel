@@ -6,6 +6,7 @@ use App\Enums\UserRole;
 use App\Http\Requests\User\StoreUserRequest;
 use App\Http\Requests\User\UpdateUserRequest;
 use App\Models\User;
+use App\Services\AuditLogger;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
@@ -53,11 +54,20 @@ class UserController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(StoreUserRequest $request): RedirectResponse
+    public function store(StoreUserRequest $request, AuditLogger $auditLogger): RedirectResponse
     {
-        User::query()->create($request->safe()->merge([
+        $user = User::query()->create($request->safe()->merge([
             'is_active' => $request->boolean('is_active', true),
         ])->all());
+
+        $auditLogger->log(
+            'user.created',
+            "Created user {$user->email}.",
+            $user,
+            null,
+            $user->only(['name', 'email', 'role', 'is_active']),
+            $request,
+        );
 
         return redirect()
             ->route('users.index')
@@ -86,8 +96,9 @@ class UserController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateUserRequest $request, User $user): RedirectResponse
+    public function update(UpdateUserRequest $request, User $user, AuditLogger $auditLogger): RedirectResponse
     {
+        $before = $user->only(['name', 'email', 'role', 'is_active']);
         $validated = $request->safe()->except(['password']);
 
         if ($request->filled('password')) {
@@ -103,6 +114,15 @@ class UserController extends Controller
         }
 
         $user->update($validated);
+
+        $auditLogger->log(
+            'user.updated',
+            "Updated user {$user->email}.",
+            $user,
+            $before,
+            $user->fresh()->only(['name', 'email', 'role', 'is_active']),
+            $request,
+        );
 
         return redirect()
             ->route('users.index')
@@ -123,9 +143,19 @@ class UserController extends Controller
             return back()->with('error', 'You cannot deactivate your own account.');
         }
 
+        $before = $user->only(['is_active']);
+
         $user->update([
             'is_active' => ! $user->is_active,
         ]);
+
+        app(AuditLogger::class)->log(
+            $user->is_active ? 'user.activated' : 'user.deactivated',
+            ($user->is_active ? 'Activated' : 'Deactivated')." user {$user->email}.",
+            $user,
+            $before,
+            $user->fresh()->only(['is_active']),
+        );
 
         return back()->with('status', $user->is_active ? 'User activated successfully.' : 'User deactivated successfully.');
     }

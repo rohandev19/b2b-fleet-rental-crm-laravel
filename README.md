@@ -4,7 +4,7 @@ Laravel portfolio project for a B2B vehicle rental company. The application will
 
 ## Current Milestone
 
-Milestone 9: Dashboard and reports.
+Milestone 10: Audit log and security hardening.
 
 - Laravel 12 application scaffolded.
 - Laravel Breeze Blade authentication installed.
@@ -45,6 +45,10 @@ Milestone 9: Dashboard and reports.
 - Dashboard includes pipeline snapshot, recent quotations, overdue follow-ups, and role-specific work queue.
 - Reports page added for Admin/Manager/Finance with period filters.
 - Reports cover prospect funnel, quotation status value, follow-up outcomes, and sales performance.
+- Audit log table, logger service, and Admin/Manager audit log viewer added.
+- User, prospect, contact, follow-up, quotation approval, and PDF generation actions are audited.
+- Audit logs capture actor, action, record, changed values, IP address, and user agent.
+- Active-session hardening logs out users whose account is deactivated after login.
 
 ## Tech Stack
 

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Quotation;
+use App\Services\AuditLogger;
 use App\Services\Quotation\QuotationPdfService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Storage;
@@ -11,9 +12,19 @@ use Symfony\Component\HttpFoundation\StreamedResponse;
 
 class QuotationPdfController extends Controller
 {
-    public function generate(Quotation $quotation, QuotationPdfService $service): RedirectResponse
+    public function generate(Quotation $quotation, QuotationPdfService $service, AuditLogger $auditLogger): RedirectResponse
     {
+        $before = $quotation->only(['pdf_path', 'pdf_generated_at']);
         $service->generate($quotation);
+        $quotation->refresh();
+
+        $auditLogger->log(
+            'quotation.pdf_generated',
+            "Generated PDF for quotation {$quotation->quotation_number}.",
+            $quotation,
+            $before,
+            $quotation->only(['pdf_path', 'pdf_generated_at']),
+        );
 
         return redirect()
             ->route('quotations.show', $quotation)
