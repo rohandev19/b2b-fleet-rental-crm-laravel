@@ -49,6 +49,9 @@ jobs:
           DB_CONNECTION: sqlite
           DB_DATABASE: database/database.sqlite
 
+      - name: Check PHP code style
+        run: vendor/bin/pint --test --ansi
+
       - name: Build frontend
         run: npm run build
 
