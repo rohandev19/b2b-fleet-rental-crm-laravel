@@ -9,17 +9,13 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\View\View;
+use Symfony\Component\HttpFoundation\StreamedResponse;
 
 class ReportController extends Controller
 {
     public function index(Request $request): View
     {
-        $startDate = $request->date('start_date')?->startOfDay() ?? now()->startOfMonth();
-        $endDate = $request->date('end_date')?->endOfDay() ?? now()->endOfMonth();
-
-        if ($startDate->greaterThan($endDate)) {
-            [$startDate, $endDate] = [$endDate->copy()->startOfDay(), $startDate->copy()->endOfDay()];
-        }
+        [$startDate, $endDate] = $this->reportPeriod($request);
 
         return view('reports.index', [
             'startDate' => $startDate,
@@ -30,6 +26,115 @@ class ReportController extends Controller
             'followUpOutcomes' => $this->followUpOutcomes($startDate, $endDate),
             'salesPerformance' => $this->salesPerformance($startDate, $endDate),
         ]);
+    }
+
+    public function exportProspects(Request $request): StreamedResponse
+    {
+        [$startDate, $endDate] = $this->reportPeriod($request);
+        $filename = 'prospects-'.$startDate->toDateString().'-to-'.$endDate->toDateString().'.csv';
+
+        return response()->streamDownload(function () use ($startDate, $endDate): void {
+            $handle = fopen('php://output', 'w');
+
+            fputcsv($handle, [
+                'Company Name',
+                'Industry',
+                'City',
+                'Status',
+                'Priority',
+                'Estimated Vehicle Need',
+                'Assigned Sales',
+                'Contacts',
+                'Next Follow Up',
+                'Created At',
+            ]);
+
+            Prospect::query()
+                ->with('assignedSales:id,name')
+                ->withCount('contacts')
+                ->whereBetween('created_at', [$startDate, $endDate])
+                ->orderBy('company_name')
+                ->chunk(100, function ($prospects) use ($handle): void {
+                    foreach ($prospects as $prospect) {
+                        fputcsv($handle, [
+                            $prospect->company_name,
+                            $prospect->industry,
+                            $prospect->city,
+                            str($prospect->status)->headline()->toString(),
+                            str($prospect->priority)->headline()->toString(),
+                            $prospect->estimated_vehicle_need,
+                            $prospect->assignedSales?->name,
+                            $prospect->contacts_count,
+                            $prospect->next_follow_up_at?->toDateTimeString(),
+                            $prospect->created_at?->toDateTimeString(),
+                        ]);
+                    }
+                });
+
+            fclose($handle);
+        }, $filename, ['Content-Type' => 'text/csv']);
+    }
+
+    public function exportQuotations(Request $request): StreamedResponse
+    {
+        [$startDate, $endDate] = $this->reportPeriod($request);
+        $filename = 'quotations-'.$startDate->toDateString().'-to-'.$endDate->toDateString().'.csv';
+
+        return response()->streamDownload(function () use ($startDate, $endDate): void {
+            $handle = fopen('php://output', 'w');
+
+            fputcsv($handle, [
+                'Quotation Number',
+                'Prospect',
+                'Sales',
+                'Quotation Date',
+                'Valid Until',
+                'Status',
+                'Subtotal',
+                'Discount',
+                'Tax',
+                'Grand Total',
+            ]);
+
+            Quotation::query()
+                ->with(['prospect:id,company_name', 'sales:id,name'])
+                ->whereBetween('quotation_date', [$startDate->toDateString(), $endDate->toDateString()])
+                ->orderBy('quotation_date')
+                ->orderBy('quotation_number')
+                ->chunk(100, function ($quotations) use ($handle): void {
+                    foreach ($quotations as $quotation) {
+                        fputcsv($handle, [
+                            $quotation->quotation_number,
+                            $quotation->prospect?->company_name,
+                            $quotation->sales?->name,
+                            $quotation->quotation_date?->toDateString(),
+                            $quotation->valid_until?->toDateString(),
+                            str($quotation->status)->headline()->toString(),
+                            $quotation->subtotal,
+                            $quotation->discount_amount,
+                            $quotation->tax_amount,
+                            $quotation->grand_total,
+                        ]);
+                    }
+                });
+
+            fclose($handle);
+        }, $filename, ['Content-Type' => 'text/csv']);
+    }
+
+    /**
+     * @return array{0: Carbon, 1: Carbon}
+     */
+    private function reportPeriod(Request $request): array
+    {
+        $startDate = $request->date('start_date')?->startOfDay() ?? now()->startOfMonth();
+        $endDate = $request->date('end_date')?->endOfDay() ?? now()->endOfMonth();
+
+        if ($startDate->greaterThan($endDate)) {
+            [$startDate, $endDate] = [$endDate->copy()->startOfDay(), $startDate->copy()->endOfDay()];
+        }
+
+        return [$startDate, $endDate];
     }
 
     /**
