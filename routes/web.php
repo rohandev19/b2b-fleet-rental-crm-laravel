@@ -53,6 +53,8 @@ Route::middleware(['auth', 'role:admin,manager,finance'])->group(function () {
     Route::get('/vehicles', [VehicleController::class, 'index'])->name('vehicles.index');
     Route::get('/rental-packages', [RentalPackageController::class, 'index'])->name('rental-packages.index');
     Route::get('/reports', [ReportController::class, 'index'])->name('reports.index');
+    Route::get('/reports/exports/prospects', [ReportController::class, 'exportProspects'])->name('reports.exports.prospects');
+    Route::get('/reports/exports/quotations', [ReportController::class, 'exportQuotations'])->name('reports.exports.quotations');
 });
 
 Route::middleware(['auth', 'role:admin,sales,manager,finance'])->group(function () {
