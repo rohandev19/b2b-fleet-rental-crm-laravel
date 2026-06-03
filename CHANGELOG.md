@@ -17,6 +17,7 @@ This release completes the milestone plan for the B2B Fleet Rental CRM & Quotati
 - Approved quotation PDF generation and private local file storage.
 - Dashboard metrics, pipeline snapshot, recent quotation list, overdue follow-up list, and role-specific work queues.
 - Reports page with date filters, prospect funnel, quotation values by status, follow-up outcomes, and sales performance.
+- CSV exports for period-filtered prospect and quotation report data.
 - Audit logging for sensitive CRM and quotation actions.
 - Session hardening that logs out users whose account is deactivated after login.
 - Idempotent portfolio demo seeder with users, prospects, contacts, follow-ups, vehicles, packages, quotations, approvals, and audit sample data.
@@ -24,6 +25,6 @@ This release completes the milestone plan for the B2B Fleet Rental CRM & Quotati
 
 ### Verification
 
-- Full PHPUnit feature/unit suite covers authentication, roles, users, prospects, follow-ups, master data, quotation draft/calculation, approval, PDF generation, dashboard, reports, audit logs, and seed data.
+- Full PHPUnit feature/unit suite covers authentication, roles, users, prospects, follow-ups, master data, quotation draft/calculation, approval, PDF generation, dashboard, reports, CSV exports, audit logs, and seed data.
 - Production frontend build verified with `npm run build`.
 - Database migrations verified with `php artisan migrate:status`.
