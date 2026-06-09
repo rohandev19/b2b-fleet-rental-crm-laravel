@@ -1,5 +1,20 @@
 # Changelog
 
+## 1.1.1 - Report Export Route Patch
+
+This patch aligns report export URLs with the project route plan while preserving backward-compatible redirects.
+
+### Changed
+
+- Canonical prospect export route changed to `/reports/export/prospects`.
+- Canonical quotation export route changed to `/reports/export/quotations`.
+- Legacy `/reports/exports/...` URLs now redirect to the canonical export paths.
+
+### Verification
+
+- Full PHPUnit feature/unit suite passed with 93 tests and 261 assertions.
+- Laravel Pint style check passed with `vendor/bin/pint --test`.
+
 ## 1.1.0 - Portfolio Maintenance Release
 
 This release adds repository automation, GitHub contribution templates, and report CSV exports after the initial portfolio release.
