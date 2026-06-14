@@ -1,5 +1,17 @@
 # Changelog
 
+## Unreleased
+
+### Added
+
+- Follow-up reminder digest command with `--today` and `--overdue` filters.
+- Daily scheduler registration for the default reminder digest at `08:00`.
+
+### Verification
+
+- Full PHPUnit feature/unit suite passed with 96 tests and 278 assertions.
+- Laravel Pint style check passed with `vendor/bin/pint --test`.
+
 ## 1.1.1 - Report Export Route Patch
 
 This patch aligns report export URLs with the project route plan while preserving backward-compatible redirects.
