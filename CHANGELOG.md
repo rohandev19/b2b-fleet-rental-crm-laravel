@@ -8,11 +8,13 @@
 - Daily scheduler registration for the default reminder digest at `08:00`.
 - Quotation expiry command with `--dry-run` support.
 - Daily scheduler registration for quotation expiry at `00:30`.
+- Quotation action for marking approved generated quotations as sent.
 
 ### Verification
 
-- Full PHPUnit feature/unit suite passed with 99 tests and 295 assertions.
+- Full PHPUnit feature/unit suite passed with 102 tests and 304 assertions.
 - Laravel Pint style check passed with `vendor/bin/pint --test`.
+- Production frontend build passed with `npm run build`.
 
 ## 1.1.1 - Report Export Route Patch
 
