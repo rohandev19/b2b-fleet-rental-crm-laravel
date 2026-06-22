@@ -9,11 +9,12 @@ This CRM is built as a milestone-based Laravel portfolio project for a B2B fleet
 3. Open Prospects and inspect `PT Nusantara Retailindo`.
 4. Open Quotations and review the approved quotation ending in `9001`.
 5. Generate the quotation PDF from the approved quotation detail page.
-6. Open Reports to view the funnel, quotation value, sales performance, and CSV export actions.
-7. Export prospect or quotation CSV data for the selected report period.
-8. Run `php artisan crm:follow-up-reminders` to show due and overdue follow-up reminders.
-9. Run `php artisan crm:expire-quotations --dry-run` to preview quotation expiry automation.
-10. Open Audit Logs to inspect recorded changes.
+6. Mark the approved generated quotation as sent.
+7. Open Reports to view the funnel, quotation value, sales performance, and CSV export actions.
+8. Export prospect or quotation CSV data for the selected report period.
+9. Run `php artisan crm:follow-up-reminders` to show due and overdue follow-up reminders.
+10. Run `php artisan crm:expire-quotations --dry-run` to preview quotation expiry automation.
+11. Open Audit Logs to inspect recorded changes.
 
 ## Demo Accounts
 
