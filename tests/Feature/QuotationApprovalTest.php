@@ -192,4 +192,78 @@ class QuotationApprovalTest extends TestCase
             ->post("/quotations/{$quotation->id}/mark-sent")
             ->assertForbidden();
     }
+
+    public function test_sales_can_mark_sent_quotation_as_accepted(): void
+    {
+        $sales = User::factory()->create(['role' => UserRole::Sales]);
+        $quotation = Quotation::factory()->create([
+            'sales_id' => $sales->id,
+            'status' => 'sent',
+        ]);
+
+        $this->actingAs($sales)
+            ->post("/quotations/{$quotation->id}/accept")
+            ->assertRedirect(route('quotations.show', $quotation));
+
+        $this->assertDatabaseHas('quotations', [
+            'id' => $quotation->id,
+            'status' => 'accepted',
+        ]);
+
+        $this->assertDatabaseHas('quotation_approvals', [
+            'quotation_id' => $quotation->id,
+            'user_id' => $sales->id,
+            'action' => 'accept',
+            'from_status' => 'sent',
+            'to_status' => 'accepted',
+        ]);
+
+        $this->assertDatabaseHas('audit_logs', [
+            'action' => 'quotation.accepted',
+            'auditable_type' => Quotation::class,
+            'auditable_id' => $quotation->id,
+        ]);
+    }
+
+    public function test_manager_can_mark_sent_quotation_as_declined(): void
+    {
+        $manager = User::factory()->create(['role' => UserRole::Manager]);
+        $quotation = Quotation::factory()->create(['status' => 'sent']);
+
+        $this->actingAs($manager)
+            ->post("/quotations/{$quotation->id}/decline")
+            ->assertRedirect(route('quotations.show', $quotation));
+
+        $this->assertDatabaseHas('quotations', [
+            'id' => $quotation->id,
+            'status' => 'declined',
+        ]);
+
+        $this->assertDatabaseHas('quotation_approvals', [
+            'quotation_id' => $quotation->id,
+            'user_id' => $manager->id,
+            'action' => 'decline',
+            'from_status' => 'sent',
+            'to_status' => 'declined',
+        ]);
+    }
+
+    public function test_only_sent_quotations_can_be_marked_as_customer_outcome(): void
+    {
+        $sales = User::factory()->create(['role' => UserRole::Sales]);
+        $quotation = Quotation::factory()->create([
+            'sales_id' => $sales->id,
+            'status' => 'approved',
+        ]);
+
+        $this->actingAs($sales)
+            ->post("/quotations/{$quotation->id}/accept")
+            ->assertSessionHasErrors('status');
+
+        $this->actingAs($sales)
+            ->post("/quotations/{$quotation->id}/decline")
+            ->assertSessionHasErrors('status');
+
+        $this->assertSame('approved', $quotation->fresh()->status);
+    }
 }

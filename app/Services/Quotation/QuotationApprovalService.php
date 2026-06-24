@@ -79,6 +79,28 @@ class QuotationApprovalService
         return $this->transition($quotation, $user, 'mark_sent', 'sent');
     }
 
+    public function accept(Quotation $quotation, User $user): Quotation
+    {
+        if ($quotation->status !== 'sent') {
+            throw ValidationException::withMessages([
+                'status' => 'Only sent quotations can be accepted.',
+            ]);
+        }
+
+        return $this->transition($quotation, $user, 'accept', 'accepted');
+    }
+
+    public function decline(Quotation $quotation, User $user): Quotation
+    {
+        if ($quotation->status !== 'sent') {
+            throw ValidationException::withMessages([
+                'status' => 'Only sent quotations can be declined.',
+            ]);
+        }
+
+        return $this->transition($quotation, $user, 'decline', 'declined');
+    }
+
     private function transition(Quotation $quotation, User $user, string $action, string $toStatus, ?string $reason = null): Quotation
     {
         return DB::transaction(function () use ($quotation, $user, $action, $toStatus, $reason) {

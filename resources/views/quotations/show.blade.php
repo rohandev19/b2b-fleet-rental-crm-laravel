@@ -42,6 +42,18 @@
                         <button type="submit" class="rounded-lg bg-sky-600 px-4 py-2 text-sm font-semibold text-white transition hover:bg-sky-700">Mark as sent</button>
                     </form>
                 @endif
+
+                @if ($quotation->status === 'sent' && auth()->user()->hasRole(\App\Enums\UserRole::Admin, \App\Enums\UserRole::Sales, \App\Enums\UserRole::Manager))
+                    <form method="POST" action="{{ route('quotations.accept', $quotation) }}">
+                        @csrf
+                        <button type="submit" class="rounded-lg bg-emerald-600 px-4 py-2 text-sm font-semibold text-white transition hover:bg-emerald-700">Mark accepted</button>
+                    </form>
+
+                    <form method="POST" action="{{ route('quotations.decline', $quotation) }}">
+                        @csrf
+                        <button type="submit" class="rounded-lg border border-red-200 bg-white px-4 py-2 text-sm font-semibold text-red-700 transition hover:bg-red-50">Mark declined</button>
+                    </form>
+                @endif
             </div>
         </div>
 
