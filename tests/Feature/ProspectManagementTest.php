@@ -89,6 +89,19 @@ class ProspectManagementTest extends TestCase
             ->assertSessionHasErrors('lost_reason');
     }
 
+    public function test_won_status_is_reserved_for_quotation_acceptance_workflow(): void
+    {
+        $sales = User::factory()->create(['role' => UserRole::Sales]);
+
+        $this->actingAs($sales)
+            ->post('/prospects', $this->validProspectPayload([
+                'status' => 'won',
+            ]))
+            ->assertSessionHasErrors([
+                'status' => 'Won status is set automatically when a sent quotation is accepted.',
+            ]);
+    }
+
     public function test_sales_can_add_primary_contact_and_replace_previous_primary(): void
     {
         $sales = User::factory()->create(['role' => UserRole::Sales]);
