@@ -83,7 +83,8 @@ Milestones 1-11 complete. The project is ready for portfolio review, demo seedin
 
 ```bash
 composer install
-cp .env.example .env
+# Create a local .env file from your private environment template.
+# Keep .env and every .env.* file out of Git.
 php artisan key:generate
 php artisan migrate
 php artisan db:seed
