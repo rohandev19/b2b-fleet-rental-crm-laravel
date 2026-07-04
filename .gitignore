@@ -1,6 +1,7 @@
 *.log
 .DS_Store
 .env
+.env.*
 .env.backup
 .env.production
 .phpactor.json
@@ -21,4 +22,5 @@
 /vendor
 Homestead.json
 Homestead.yaml
+PROJECT_HAN_WEBSITE_1_B2B_FLEET_RENTAL_CRM_PLAN.md
 Thumbs.db
