@@ -50,6 +50,25 @@ class ProspectController extends Controller
         ]);
     }
 
+    public function pipeline(Request $request): View
+    {
+        $prospects = Prospect::query()
+            ->with(['assignedSales:id,name'])
+            ->withCount(['contacts', 'quotations'])
+            ->when($request->user()->hasRole(UserRole::Sales), fn ($query) => $query->where('assigned_sales_id', $request->user()->id))
+            ->orderByRaw("case priority when 'high' then 1 when 'medium' then 2 else 3 end")
+            ->latest('updated_at')
+            ->get()
+            ->groupBy('status');
+
+        $stages = collect(Prospect::STATUSES)
+            ->mapWithKeys(fn (string $status) => [$status => $prospects->get($status, collect())]);
+
+        return view('prospects.pipeline', [
+            'stages' => $stages,
+        ]);
+    }
+
     public function store(StoreProspectRequest $request, AuditLogger $auditLogger): RedirectResponse
     {
         $data = $request->validated();
