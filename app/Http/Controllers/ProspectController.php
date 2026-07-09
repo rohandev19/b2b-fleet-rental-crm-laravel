@@ -7,6 +7,7 @@ use App\Http\Requests\Prospect\StoreProspectRequest;
 use App\Http\Requests\Prospect\UpdateProspectRequest;
 use App\Models\Prospect;
 use App\Models\User;
+use App\Services\AuditLogger;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
@@ -49,7 +50,7 @@ class ProspectController extends Controller
         ]);
     }
 
-    public function store(StoreProspectRequest $request): RedirectResponse
+    public function store(StoreProspectRequest $request, AuditLogger $auditLogger): RedirectResponse
     {
         $data = $request->validated();
 
@@ -58,6 +59,15 @@ class ProspectController extends Controller
         }
 
         $prospect = Prospect::query()->create($data);
+
+        $auditLogger->log(
+            'prospect.created',
+            "Created prospect {$prospect->company_name}.",
+            $prospect,
+            null,
+            $prospect->only(['company_name', 'status', 'priority', 'assigned_sales_id']),
+            $request,
+        );
 
         return redirect()
             ->route('prospects.show', $prospect)
@@ -85,18 +95,39 @@ class ProspectController extends Controller
         ]);
     }
 
-    public function update(UpdateProspectRequest $request, Prospect $prospect): RedirectResponse
+    public function update(UpdateProspectRequest $request, Prospect $prospect, AuditLogger $auditLogger): RedirectResponse
     {
+        $before = $prospect->only(['company_name', 'status', 'priority', 'assigned_sales_id', 'next_follow_up_at']);
+
         $prospect->update($request->validated());
+
+        $auditLogger->log(
+            'prospect.updated',
+            "Updated prospect {$prospect->company_name}.",
+            $prospect,
+            $before,
+            $prospect->fresh()->only(['company_name', 'status', 'priority', 'assigned_sales_id', 'next_follow_up_at']),
+            $request,
+        );
 
         return redirect()
             ->route('prospects.show', $prospect)
             ->with('status', 'Prospect updated successfully.');
     }
 
-    public function destroy(Prospect $prospect): RedirectResponse
+    public function destroy(Prospect $prospect, AuditLogger $auditLogger): RedirectResponse
     {
+        $before = $prospect->only(['company_name', 'status', 'priority', 'assigned_sales_id']);
+
         $prospect->delete();
+
+        $auditLogger->log(
+            'prospect.deleted',
+            "Deleted prospect {$prospect->company_name}.",
+            $prospect,
+            $before,
+            null,
+        );
 
         return redirect()
             ->route('prospects.index')

@@ -8,6 +8,7 @@ use App\Models\ProspectContact;
 use App\Models\Quotation;
 use App\Models\RentalPackage;
 use App\Models\Vehicle;
+use App\Services\AuditLogger;
 use App\Services\Quotation\QuotationCalculator;
 use App\Services\Quotation\QuotationNumberGenerator;
 use Illuminate\Http\RedirectResponse;
@@ -68,6 +69,7 @@ class QuotationController extends Controller
         StoreQuotationRequest $request,
         QuotationCalculator $calculator,
         QuotationNumberGenerator $numberGenerator,
+        AuditLogger $auditLogger,
     ): RedirectResponse {
         $validated = $request->validated();
 
@@ -100,6 +102,15 @@ class QuotationController extends Controller
 
             return $quotation;
         });
+
+        $auditLogger->log(
+            'quotation.created',
+            "Created quotation draft {$quotation->quotation_number}.",
+            $quotation,
+            null,
+            $quotation->only(['quotation_number', 'prospect_id', 'sales_id', 'status', 'grand_total']),
+            $request,
+        );
 
         return redirect()
             ->route('quotations.show', $quotation)

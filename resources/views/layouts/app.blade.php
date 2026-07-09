@@ -25,7 +25,7 @@
                 ['label' => 'Rental Packages', 'href' => route('rental-packages.index'), 'active' => request()->routeIs('rental-packages.*'), 'enabled' => true, 'roles' => ['admin', 'manager', 'finance']],
                 ['label' => 'Reports', 'href' => route('reports.index'), 'active' => request()->routeIs('reports.*'), 'enabled' => true, 'roles' => ['admin', 'manager', 'finance']],
                 ['label' => 'Users', 'href' => route('users.index'), 'active' => request()->routeIs('users.*'), 'enabled' => true, 'roles' => ['admin']],
-                ['label' => 'Audit Logs', 'href' => '#', 'active' => false, 'enabled' => false, 'roles' => ['admin', 'manager']],
+                ['label' => 'Audit Logs', 'href' => route('audit-logs.index'), 'active' => request()->routeIs('audit-logs.*'), 'enabled' => true, 'roles' => ['admin', 'manager']],
             ];
         @endphp
 
