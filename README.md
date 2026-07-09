@@ -4,7 +4,7 @@ Laravel portfolio project for a B2B vehicle rental company. The application will
 
 ## Current Milestone
 
-Milestone 5: Vehicle and rental package masters.
+Milestone 6: Quotation draft and calculation service.
 
 - Laravel 12 application scaffolded.
 - Laravel Breeze Blade authentication installed.
@@ -29,6 +29,10 @@ Milestone 5: Vehicle and rental package masters.
 - Vehicle master CRUD added with type, transmission, fuel, seat capacity, base monthly price, and active status.
 - Rental package CRUD added with duration and included services.
 - Admin can manage master data; Manager/Finance can view master data.
+- Quotation draft creation added with prospect, PIC, vehicle, package, and multiple line items.
+- Quotation number is generated automatically using `QTN/HAN/YYYY/MM/0001` format.
+- Subtotal, discount, tax, and grand total are calculated server-side.
+- Active vehicle/package validation added for new quotation drafts.
 
 ## Tech Stack
 

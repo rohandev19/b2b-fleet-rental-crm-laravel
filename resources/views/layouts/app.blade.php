@@ -20,7 +20,7 @@
                 ['label' => 'Prospects', 'href' => route('prospects.index'), 'active' => request()->routeIs('prospects.*'), 'enabled' => true, 'roles' => ['admin', 'sales', 'manager', 'finance']],
                 ['label' => 'Pipeline', 'href' => '#', 'active' => false, 'enabled' => false, 'roles' => ['admin', 'sales', 'manager']],
                 ['label' => 'Follow-ups', 'href' => route('follow-ups.today'), 'active' => request()->routeIs('follow-ups.*'), 'enabled' => true, 'roles' => ['admin', 'sales', 'manager']],
-                ['label' => 'Quotations', 'href' => '#', 'active' => false, 'enabled' => false, 'roles' => ['admin', 'sales', 'manager', 'finance']],
+                ['label' => 'Quotations', 'href' => route('quotations.index'), 'active' => request()->routeIs('quotations.*'), 'enabled' => true, 'roles' => ['admin', 'sales', 'manager', 'finance']],
                 ['label' => 'Vehicles', 'href' => route('vehicles.index'), 'active' => request()->routeIs('vehicles.*'), 'enabled' => true, 'roles' => ['admin', 'manager', 'finance']],
                 ['label' => 'Rental Packages', 'href' => route('rental-packages.index'), 'active' => request()->routeIs('rental-packages.*'), 'enabled' => true, 'roles' => ['admin', 'manager', 'finance']],
                 ['label' => 'Reports', 'href' => '#', 'active' => false, 'enabled' => false, 'roles' => ['admin', 'manager', 'finance']],
