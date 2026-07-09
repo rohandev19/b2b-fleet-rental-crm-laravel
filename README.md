@@ -4,7 +4,7 @@ Laravel portfolio project for a B2B vehicle rental company. The application will
 
 ## Current Milestone
 
-Milestone 1: Authentication and role-based dashboard layout.
+Milestone 2: User management.
 
 - Laravel 12 application scaffolded.
 - Laravel Breeze Blade authentication installed.
@@ -15,6 +15,9 @@ Milestone 1: Authentication and role-based dashboard layout.
 - User role enum and role middleware added.
 - Role-based dashboard shell with sidebar/topbar added.
 - Demo users can be seeded.
+- Admin-only user management added.
+- Admin can create, edit, filter, and activate/deactivate users.
+- Inactive users cannot sign in.
 
 ## Tech Stack
 
