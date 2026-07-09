@@ -64,6 +64,11 @@ class Prospect extends Model
         return $this->hasMany(FollowUpActivity::class);
     }
 
+    public function quotations(): HasMany
+    {
+        return $this->hasMany(Quotation::class);
+    }
+
     public function primaryContact(): HasMany
     {
         return $this->contacts()->where('is_primary', true);

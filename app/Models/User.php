@@ -72,4 +72,9 @@ class User extends Authenticatable
     {
         return $this->hasMany(FollowUpActivity::class);
     }
+
+    public function quotations(): HasMany
+    {
+        return $this->hasMany(Quotation::class, 'sales_id');
+    }
 }
