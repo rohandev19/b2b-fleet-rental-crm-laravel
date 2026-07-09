@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\FollowUpActivityController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ProspectContactController;
 use App\Http\Controllers\ProspectController;
@@ -44,10 +45,20 @@ Route::middleware(['auth', 'role:admin,sales'])->scopeBindings()->group(function
     Route::get('/prospects/{prospect}/contacts/{contact}/edit', [ProspectContactController::class, 'edit'])->name('prospects.contacts.edit');
     Route::put('/prospects/{prospect}/contacts/{contact}', [ProspectContactController::class, 'update'])->name('prospects.contacts.update');
     Route::delete('/prospects/{prospect}/contacts/{contact}', [ProspectContactController::class, 'destroy'])->name('prospects.contacts.destroy');
+
+    Route::post('/prospects/{prospect}/follow-ups', [FollowUpActivityController::class, 'store'])->name('prospects.follow-ups.store');
+    Route::get('/prospects/{prospect}/follow-ups/{followUpActivity}/edit', [FollowUpActivityController::class, 'edit'])->name('prospects.follow-ups.edit');
+    Route::put('/prospects/{prospect}/follow-ups/{followUpActivity}', [FollowUpActivityController::class, 'update'])->name('prospects.follow-ups.update');
+    Route::delete('/prospects/{prospect}/follow-ups/{followUpActivity}', [FollowUpActivityController::class, 'destroy'])->name('prospects.follow-ups.destroy');
 });
 
 Route::middleware(['auth', 'role:admin,sales,manager,finance'])->group(function () {
     Route::get('/prospects/{prospect}', [ProspectController::class, 'show'])->name('prospects.show');
+});
+
+Route::middleware(['auth', 'role:admin,sales,manager'])->group(function () {
+    Route::get('/follow-ups/today', [FollowUpActivityController::class, 'today'])->name('follow-ups.today');
+    Route::get('/follow-ups/overdue', [FollowUpActivityController::class, 'overdue'])->name('follow-ups.overdue');
 });
 
 require __DIR__.'/auth.php';

@@ -4,7 +4,7 @@ Laravel portfolio project for a B2B vehicle rental company. The application will
 
 ## Current Milestone
 
-Milestone 3: Prospect and contact management.
+Milestone 4: Follow-up activity tracking.
 
 - Laravel 12 application scaffolded.
 - Laravel Breeze Blade authentication installed.
@@ -22,6 +22,10 @@ Milestone 3: Prospect and contact management.
 - Prospect detail page includes company profile, pipeline status, sales owner, and PIC contacts.
 - Admin/Sales can manage prospects and contacts; Manager/Finance can view prospects.
 - Primary PIC rule keeps only one primary contact per prospect.
+- Follow-up activity timeline added to prospect detail.
+- Admin/Sales can add, edit, and delete follow-up activities.
+- Today and overdue follow-up reminder pages added.
+- Lost prospects reject new follow-up activities.
 
 ## Tech Stack
 
