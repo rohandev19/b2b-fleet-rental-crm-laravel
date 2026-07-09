@@ -24,12 +24,23 @@
                         <button type="submit" class="rounded-lg bg-emerald-600 px-4 py-2 text-sm font-semibold text-white transition hover:bg-emerald-700">Approve</button>
                     </form>
                 @endif
+
+                @if ($quotation->status === 'approved' && auth()->user()->hasRole(\App\Enums\UserRole::Admin, \App\Enums\UserRole::Sales, \App\Enums\UserRole::Manager))
+                    <form method="POST" action="{{ route('quotations.generate-pdf', $quotation) }}">
+                        @csrf
+                        <button type="submit" class="rounded-lg bg-neutral-950 px-4 py-2 text-sm font-semibold text-white transition hover:bg-neutral-800">Generate PDF</button>
+                    </form>
+                @endif
+
+                @if ($quotation->status === 'approved' && $quotation->pdf_path && auth()->user()->hasRole(\App\Enums\UserRole::Admin, \App\Enums\UserRole::Sales, \App\Enums\UserRole::Manager, \App\Enums\UserRole::Finance))
+                    <a href="{{ route('quotations.download-pdf', $quotation) }}" class="rounded-lg border border-neutral-300 bg-white px-4 py-2 text-sm font-semibold text-neutral-800 transition hover:bg-neutral-50">Download PDF</a>
+                @endif
             </div>
         </div>
 
-        @if ($errors->has('status') || $errors->has('approved_by'))
+        @if ($errors->has('status') || $errors->has('approved_by') || $errors->has('pdf_path'))
             <div class="rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-sm font-medium text-red-800">
-                {{ $errors->first('status') ?: $errors->first('approved_by') }}
+                {{ $errors->first('status') ?: $errors->first('approved_by') ?: $errors->first('pdf_path') }}
             </div>
         @endif
 
@@ -49,6 +60,9 @@
             <div class="rounded-lg border border-neutral-200 bg-white p-5 shadow-sm">
                 <div class="text-sm font-medium text-neutral-500">Grand Total</div>
                 <div class="mt-3 text-xl font-semibold text-neutral-950">Rp{{ number_format((float) $quotation->grand_total, 0, ',', '.') }}</div>
+                @if ($quotation->pdf_generated_at)
+                    <div class="mt-2 text-xs text-neutral-500">PDF generated {{ $quotation->pdf_generated_at->format('d M Y H:i') }}</div>
+                @endif
             </div>
         </section>
 

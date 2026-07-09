@@ -41,6 +41,8 @@ class Quotation extends Model
         'grand_total',
         'terms_and_conditions',
         'internal_notes',
+        'pdf_path',
+        'pdf_generated_at',
     ];
 
     protected function casts(): array
@@ -53,6 +55,7 @@ class Quotation extends Model
             'tax_percent' => 'decimal:2',
             'tax_amount' => 'decimal:2',
             'grand_total' => 'decimal:2',
+            'pdf_generated_at' => 'datetime',
         ];
     }
 
