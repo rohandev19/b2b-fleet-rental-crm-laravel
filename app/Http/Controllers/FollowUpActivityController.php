@@ -7,6 +7,7 @@ use App\Http\Requests\FollowUp\StoreFollowUpActivityRequest;
 use App\Http\Requests\FollowUp\UpdateFollowUpActivityRequest;
 use App\Models\FollowUpActivity;
 use App\Models\Prospect;
+use App\Services\AuditLogger;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
@@ -43,7 +44,7 @@ class FollowUpActivityController extends Controller
         ]);
     }
 
-    public function store(StoreFollowUpActivityRequest $request, Prospect $prospect): RedirectResponse
+    public function store(StoreFollowUpActivityRequest $request, Prospect $prospect, AuditLogger $auditLogger): RedirectResponse
     {
         $activity = $prospect->followUpActivities()->create($request->safe()->merge([
             'contact_id' => $request->input('contact_id') ?: null,
@@ -51,6 +52,15 @@ class FollowUpActivityController extends Controller
         ])->all());
 
         $this->syncProspectNextFollowUp($prospect, $activity);
+
+        $auditLogger->log(
+            'follow_up.created',
+            "Created follow-up for {$prospect->company_name}.",
+            $activity,
+            null,
+            $activity->only(['prospect_id', 'user_id', 'activity_type', 'activity_date', 'next_follow_up_at', 'outcome']),
+            $request,
+        );
 
         return redirect()
             ->route('prospects.show', $prospect)
@@ -69,24 +79,45 @@ class FollowUpActivityController extends Controller
         ]);
     }
 
-    public function update(UpdateFollowUpActivityRequest $request, Prospect $prospect, FollowUpActivity $followUpActivity): RedirectResponse
+    public function update(UpdateFollowUpActivityRequest $request, Prospect $prospect, FollowUpActivity $followUpActivity, AuditLogger $auditLogger): RedirectResponse
     {
+        $before = $followUpActivity->only(['activity_type', 'activity_date', 'summary', 'next_follow_up_at', 'outcome']);
+
         $followUpActivity->update($request->safe()->merge([
             'contact_id' => $request->input('contact_id') ?: null,
         ])->all());
 
         $this->syncProspectNextFollowUp($prospect, $followUpActivity);
 
+        $auditLogger->log(
+            'follow_up.updated',
+            "Updated follow-up for {$prospect->company_name}.",
+            $followUpActivity,
+            $before,
+            $followUpActivity->fresh()->only(['activity_type', 'activity_date', 'summary', 'next_follow_up_at', 'outcome']),
+            $request,
+        );
+
         return redirect()
             ->route('prospects.show', $prospect)
             ->with('status', 'Follow-up activity updated successfully.');
     }
 
-    public function destroy(Prospect $prospect, FollowUpActivity $followUpActivity): RedirectResponse
+    public function destroy(Prospect $prospect, FollowUpActivity $followUpActivity, AuditLogger $auditLogger): RedirectResponse
     {
         $this->authorizeActivityMutation($followUpActivity);
 
+        $before = $followUpActivity->only(['prospect_id', 'user_id', 'activity_type', 'activity_date', 'summary']);
+
         $followUpActivity->delete();
+
+        $auditLogger->log(
+            'follow_up.deleted',
+            "Deleted follow-up for {$prospect->company_name}.",
+            $followUpActivity,
+            $before,
+            null,
+        );
 
         return redirect()
             ->route('prospects.show', $prospect)
