@@ -4,7 +4,7 @@ Laravel portfolio project for a B2B vehicle rental company. The application will
 
 ## Current Milestone
 
-Milestone 8: Approved quotation PDF generation.
+Milestone 9: Dashboard and reports.
 
 - Laravel 12 application scaffolded.
 - Laravel Breeze Blade authentication installed.
@@ -41,6 +41,10 @@ Milestone 8: Approved quotation PDF generation.
 - Quotation PDFs are stored on the private local disk.
 - Admin/Sales/Manager can generate approved quotation PDFs.
 - Admin/Sales/Manager/Finance can download generated approved quotation PDFs.
+- Dashboard metrics now use live CRM, follow-up, and quotation data.
+- Dashboard includes pipeline snapshot, recent quotations, overdue follow-ups, and role-specific work queue.
+- Reports page added for Admin/Manager/Finance with period filters.
+- Reports cover prospect funnel, quotation status value, follow-up outcomes, and sales performance.
 
 ## Tech Stack
 

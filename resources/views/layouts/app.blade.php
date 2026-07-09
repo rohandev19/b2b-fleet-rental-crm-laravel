@@ -23,7 +23,7 @@
                 ['label' => 'Quotations', 'href' => route('quotations.index'), 'active' => request()->routeIs('quotations.*'), 'enabled' => true, 'roles' => ['admin', 'sales', 'manager', 'finance']],
                 ['label' => 'Vehicles', 'href' => route('vehicles.index'), 'active' => request()->routeIs('vehicles.*'), 'enabled' => true, 'roles' => ['admin', 'manager', 'finance']],
                 ['label' => 'Rental Packages', 'href' => route('rental-packages.index'), 'active' => request()->routeIs('rental-packages.*'), 'enabled' => true, 'roles' => ['admin', 'manager', 'finance']],
-                ['label' => 'Reports', 'href' => '#', 'active' => false, 'enabled' => false, 'roles' => ['admin', 'manager', 'finance']],
+                ['label' => 'Reports', 'href' => route('reports.index'), 'active' => request()->routeIs('reports.*'), 'enabled' => true, 'roles' => ['admin', 'manager', 'finance']],
                 ['label' => 'Users', 'href' => route('users.index'), 'active' => request()->routeIs('users.*'), 'enabled' => true, 'roles' => ['admin']],
                 ['label' => 'Audit Logs', 'href' => '#', 'active' => false, 'enabled' => false, 'roles' => ['admin', 'manager']],
             ];
