@@ -4,7 +4,7 @@ Laravel portfolio project for a B2B vehicle rental company. The application will
 
 ## Current Milestone
 
-Milestone 10: Audit log and security hardening.
+Milestone 11: Testing, seeders, screenshots, and portfolio polish.
 
 - Laravel 12 application scaffolded.
 - Laravel Breeze Blade authentication installed.
@@ -49,6 +49,10 @@ Milestone 10: Audit log and security hardening.
 - User, prospect, contact, follow-up, quotation approval, and PDF generation actions are audited.
 - Audit logs capture actor, action, record, changed values, IP address, and user agent.
 - Active-session hardening logs out users whose account is deactivated after login.
+- Portfolio demo dataset seeder added for prospects, contacts, follow-ups, vehicles, packages, quotations, approvals, and audit logs.
+- Seeder is idempotent for demo records and covered by feature tests.
+- Portfolio guide and screenshot checklist added in [`docs/portfolio.md`](docs/portfolio.md).
+- Full feature test suite covers the core CRM, quotation, PDF, reporting, audit, and seeder flows.
 
 ## Tech Stack
 
@@ -71,6 +75,12 @@ php artisan db:seed
 npm install
 npm run build
 php artisan serve
+```
+
+To reset with the portfolio demo dataset:
+
+```bash
+php artisan migrate:fresh --seed
 ```
 
 For active frontend development, run:
