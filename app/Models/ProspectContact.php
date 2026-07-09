@@ -34,4 +34,9 @@ class ProspectContact extends Model
     {
         return $this->belongsTo(Prospect::class);
     }
+
+    public function followUpActivities()
+    {
+        return $this->hasMany(FollowUpActivity::class, 'contact_id');
+    }
 }
