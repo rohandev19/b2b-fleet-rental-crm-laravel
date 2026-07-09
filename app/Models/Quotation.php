@@ -80,4 +80,9 @@ class Quotation extends Model
     {
         return $this->hasMany(QuotationItem::class);
     }
+
+    public function approvals(): HasMany
+    {
+        return $this->hasMany(QuotationApproval::class);
+    }
 }

@@ -4,7 +4,7 @@ Laravel portfolio project for a B2B vehicle rental company. The application will
 
 ## Current Milestone
 
-Milestone 6: Quotation draft and calculation service.
+Milestone 7: Quotation approval workflow.
 
 - Laravel 12 application scaffolded.
 - Laravel Breeze Blade authentication installed.
@@ -33,6 +33,10 @@ Milestone 6: Quotation draft and calculation service.
 - Quotation number is generated automatically using `QTN/HAN/YYYY/MM/0001` format.
 - Subtotal, discount, tax, and grand total are calculated server-side.
 - Active vehicle/package validation added for new quotation drafts.
+- Sales/Admin can submit draft quotations for approval.
+- Manager can approve or reject submitted quotations.
+- Rejection reason is required and approval history is recorded.
+- Sales cannot approve or reject their own quotations.
 
 ## Tech Stack
 
