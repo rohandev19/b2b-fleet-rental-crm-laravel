@@ -3,6 +3,7 @@
 namespace Tests\Feature;
 
 use App\Enums\UserRole;
+use App\Models\Prospect;
 use App\Models\Quotation;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -196,7 +197,12 @@ class QuotationApprovalTest extends TestCase
     public function test_sales_can_mark_sent_quotation_as_accepted(): void
     {
         $sales = User::factory()->create(['role' => UserRole::Sales]);
+        $prospect = Prospect::factory()->create([
+            'status' => 'quotation',
+            'lost_reason' => 'Previous note.',
+        ]);
         $quotation = Quotation::factory()->create([
+            'prospect_id' => $prospect->id,
             'sales_id' => $sales->id,
             'status' => 'sent',
         ]);
@@ -223,12 +229,23 @@ class QuotationApprovalTest extends TestCase
             'auditable_type' => Quotation::class,
             'auditable_id' => $quotation->id,
         ]);
+
+        $this->assertDatabaseHas('prospects', [
+            'id' => $prospect->id,
+            'status' => 'won',
+            'lost_reason' => null,
+        ]);
     }
 
     public function test_manager_can_mark_sent_quotation_as_declined(): void
     {
         $manager = User::factory()->create(['role' => UserRole::Manager]);
-        $quotation = Quotation::factory()->create(['status' => 'sent']);
+        $prospect = Prospect::factory()->create(['status' => 'negotiation']);
+        $quotation = Quotation::factory()->create([
+            'quotation_number' => 'QTN/HAN/2026/07/9090',
+            'prospect_id' => $prospect->id,
+            'status' => 'sent',
+        ]);
 
         $this->actingAs($manager)
             ->post("/quotations/{$quotation->id}/decline")
@@ -245,6 +262,12 @@ class QuotationApprovalTest extends TestCase
             'action' => 'decline',
             'from_status' => 'sent',
             'to_status' => 'declined',
+        ]);
+
+        $this->assertDatabaseHas('prospects', [
+            'id' => $prospect->id,
+            'status' => 'lost',
+            'lost_reason' => 'Quotation QTN/HAN/2026/07/9090 was declined by the customer.',
         ]);
     }
 
