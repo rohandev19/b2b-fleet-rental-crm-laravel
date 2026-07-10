@@ -13,6 +13,7 @@ use App\Http\Controllers\RentalPackageController;
 use App\Http\Controllers\ReportController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\VehicleController;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -53,8 +54,14 @@ Route::middleware(['auth', 'role:admin,manager,finance'])->group(function () {
     Route::get('/vehicles', [VehicleController::class, 'index'])->name('vehicles.index');
     Route::get('/rental-packages', [RentalPackageController::class, 'index'])->name('rental-packages.index');
     Route::get('/reports', [ReportController::class, 'index'])->name('reports.index');
-    Route::get('/reports/exports/prospects', [ReportController::class, 'exportProspects'])->name('reports.exports.prospects');
-    Route::get('/reports/exports/quotations', [ReportController::class, 'exportQuotations'])->name('reports.exports.quotations');
+    Route::get('/reports/export/prospects', [ReportController::class, 'exportProspects'])->name('reports.exports.prospects');
+    Route::get('/reports/export/quotations', [ReportController::class, 'exportQuotations'])->name('reports.exports.quotations');
+    Route::get('/reports/exports/prospects', fn (Request $request) => redirect()
+        ->route('reports.exports.prospects', $request->query()))
+        ->name('reports.exports.prospects.legacy');
+    Route::get('/reports/exports/quotations', fn (Request $request) => redirect()
+        ->route('reports.exports.quotations', $request->query()))
+        ->name('reports.exports.quotations.legacy');
 });
 
 Route::middleware(['auth', 'role:admin,sales,manager,finance'])->group(function () {
