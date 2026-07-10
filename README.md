@@ -52,6 +52,7 @@ Milestones 1-11 complete. The project is ready for portfolio review, demo seedin
 - Quotation PDFs are stored on the private local disk.
 - Admin/Sales/Manager can generate approved quotation PDFs.
 - Admin/Sales/Manager/Finance can download generated approved quotation PDFs.
+- Admin/Sales/Manager can mark approved generated quotations as sent.
 - Dashboard metrics now use live CRM, follow-up, and quotation data.
 - Dashboard includes pipeline snapshot, recent quotations, overdue follow-ups, and role-specific work queue.
 - Reports page added for Admin/Manager/Finance with period filters.
@@ -147,7 +148,7 @@ This project is built milestone by milestone with small commits. Each milestone 
 4. Follow-up activity tracking and reminder digest.
 5. Vehicle and rental package masters.
 6. Quotation draft and calculation service.
-7. Quotation approval workflow.
+7. Quotation approval and sent workflow.
 8. Approved quotation PDF generation.
 9. Dashboard, reports, and CSV exports.
 10. Audit log and security hardening.
