@@ -11,7 +11,8 @@ This CRM is built as a milestone-based Laravel portfolio project for a B2B fleet
 5. Generate the quotation PDF from the approved quotation detail page.
 6. Open Reports to view the funnel, quotation value, sales performance, and CSV export actions.
 7. Export prospect or quotation CSV data for the selected report period.
-8. Open Audit Logs to inspect recorded changes.
+8. Run `php artisan crm:follow-up-reminders` to show due and overdue follow-up reminders.
+9. Open Audit Logs to inspect recorded changes.
 
 ## Demo Accounts
 
@@ -39,6 +40,7 @@ Use the standard setup commands, then run:
 
 ```bash
 php artisan migrate:fresh --seed
+php artisan crm:follow-up-reminders
 npm run build
 php artisan serve
 ```
