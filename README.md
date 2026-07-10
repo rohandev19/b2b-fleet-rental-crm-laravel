@@ -1,6 +1,16 @@
 # B2B Fleet Rental CRM & Quotation System
 
+[![CI](https://github.com/rohandev19/b2b-fleet-rental-crm-laravel/actions/workflows/ci.yml/badge.svg)](https://github.com/rohandev19/b2b-fleet-rental-crm-laravel/actions/workflows/ci.yml)
+[![Release](https://img.shields.io/badge/release-v1.0.0-111827)](https://github.com/rohandev19/b2b-fleet-rental-crm-laravel/releases/tag/v1.0.0)
+[![Laravel](https://img.shields.io/badge/Laravel-12-ff2d20)](https://laravel.com)
+
 Laravel portfolio project for a B2B vehicle rental company. The application will cover CRM prospect tracking, PIC/contact management, sales follow-up, quotation drafting, manager approval, PDF quotation output, dashboard reporting, and audit logging.
+
+## Quick Links
+
+- Portfolio guide: [`docs/portfolio.md`](docs/portfolio.md)
+- Release history: [`CHANGELOG.md`](CHANGELOG.md)
+- CI workflow: [`.github/workflows/ci.yml`](.github/workflows/ci.yml)
 
 ## Project Status
 
