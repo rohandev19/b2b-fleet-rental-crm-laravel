@@ -86,4 +86,42 @@ class QuotationApprovalController extends Controller
             ->route('quotations.show', $quotation)
             ->with('status', 'Quotation marked as sent.');
     }
+
+    public function accept(Quotation $quotation, QuotationApprovalService $service, AuditLogger $auditLogger): RedirectResponse
+    {
+        $before = $quotation->only(['status', 'approved_by']);
+        $service->accept($quotation, auth()->user());
+        $quotation->refresh();
+
+        $auditLogger->log(
+            'quotation.accepted',
+            "Marked quotation {$quotation->quotation_number} as accepted.",
+            $quotation,
+            $before,
+            $quotation->only(['status', 'approved_by']),
+        );
+
+        return redirect()
+            ->route('quotations.show', $quotation)
+            ->with('status', 'Quotation marked as accepted.');
+    }
+
+    public function decline(Quotation $quotation, QuotationApprovalService $service, AuditLogger $auditLogger): RedirectResponse
+    {
+        $before = $quotation->only(['status', 'approved_by']);
+        $service->decline($quotation, auth()->user());
+        $quotation->refresh();
+
+        $auditLogger->log(
+            'quotation.declined',
+            "Marked quotation {$quotation->quotation_number} as declined.",
+            $quotation,
+            $before,
+            $quotation->only(['status', 'approved_by']),
+        );
+
+        return redirect()
+            ->route('quotations.show', $quotation)
+            ->with('status', 'Quotation marked as declined.');
+    }
 }

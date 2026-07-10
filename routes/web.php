@@ -105,6 +105,8 @@ Route::middleware(['auth', 'role:manager'])->group(function () {
 Route::middleware(['auth', 'role:admin,sales,manager'])->group(function () {
     Route::post('/quotations/{quotation}/generate-pdf', [QuotationPdfController::class, 'generate'])->name('quotations.generate-pdf');
     Route::post('/quotations/{quotation}/mark-sent', [QuotationApprovalController::class, 'markSent'])->name('quotations.mark-sent');
+    Route::post('/quotations/{quotation}/accept', [QuotationApprovalController::class, 'accept'])->name('quotations.accept');
+    Route::post('/quotations/{quotation}/decline', [QuotationApprovalController::class, 'decline'])->name('quotations.decline');
 });
 
 Route::middleware(['auth', 'role:admin,sales,manager,finance'])->group(function () {
