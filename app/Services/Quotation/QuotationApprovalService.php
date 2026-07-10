@@ -87,7 +87,16 @@ class QuotationApprovalService
             ]);
         }
 
-        return $this->transition($quotation, $user, 'accept', 'accepted');
+        return DB::transaction(function () use ($quotation, $user) {
+            $this->transition($quotation, $user, 'accept', 'accepted');
+
+            $quotation->prospect()->update([
+                'status' => 'won',
+                'lost_reason' => null,
+            ]);
+
+            return $quotation->refresh();
+        });
     }
 
     public function decline(Quotation $quotation, User $user): Quotation
@@ -98,7 +107,16 @@ class QuotationApprovalService
             ]);
         }
 
-        return $this->transition($quotation, $user, 'decline', 'declined');
+        return DB::transaction(function () use ($quotation, $user) {
+            $this->transition($quotation, $user, 'decline', 'declined');
+
+            $quotation->prospect()->update([
+                'status' => 'lost',
+                'lost_reason' => "Quotation {$quotation->quotation_number} was declined by the customer.",
+            ]);
+
+            return $quotation->refresh();
+        });
     }
 
     private function transition(Quotation $quotation, User $user, string $action, string $toStatus, ?string $reason = null): Quotation
