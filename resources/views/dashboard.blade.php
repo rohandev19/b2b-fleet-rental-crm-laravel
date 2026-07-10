@@ -18,28 +18,28 @@
     <div class="space-y-6">
         <section class="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
             @foreach ($metrics as $metric)
-                <div class="rounded-lg border border-neutral-200 bg-white p-5 shadow-sm">
+                <div class="rounded-lg border border-neutral-200 bg-white p-5 shadow-sm overflow-hidden">
                     <div class="flex items-center justify-between gap-3">
-                        <p class="text-sm font-medium text-neutral-500">{{ $metric['label'] }}</p>
-                        <span @class(['rounded-full border px-2 py-0.5 text-xs font-semibold', $toneClasses[$metric['tone']]])>
+                        <p class="text-sm font-medium text-neutral-500 truncate" title="{{ $metric['label'] }}">{{ $metric['label'] }}</p>
+                        <span @class(['shrink-0 rounded-full border px-2 py-0.5 text-xs font-semibold', $toneClasses[$metric['tone']]])>
                             {{ $metric['trend'] }}
                         </span>
                     </div>
-                    <div class="mt-4 text-3xl font-semibold tracking-normal text-neutral-950">{{ $metric['value'] }}</div>
+                    <div class="mt-4 text-2xl sm:text-3xl font-semibold tracking-normal text-neutral-950 truncate" title="{{ $metric['value'] }}">{{ $metric['value'] }}</div>
                 </div>
             @endforeach
         </section>
 
         <div class="grid gap-6 xl:grid-cols-[1.5fr_1fr]">
-            <section class="rounded-lg border border-neutral-200 bg-white shadow-sm">
+            <section class="rounded-lg border border-neutral-200 bg-white shadow-sm overflow-hidden">
                 <div class="border-b border-neutral-200 px-5 py-4">
                     <h2 class="text-base font-semibold text-neutral-950">Pipeline Snapshot</h2>
                 </div>
                 <div class="grid gap-3 p-5 sm:grid-cols-2 lg:grid-cols-4">
                     @foreach ($pipelineSnapshot as $stage)
-                        <div class="rounded-lg border border-neutral-200 bg-neutral-50 p-4">
-                            <div class="text-sm font-medium text-neutral-600">{{ $stage['stage'] }}</div>
-                            <div class="mt-3 text-2xl font-semibold text-neutral-950">{{ $stage['count'] }}</div>
+                        <div class="rounded-lg border border-neutral-200 bg-neutral-50 p-4 overflow-hidden">
+                            <div class="text-sm font-medium text-neutral-600 truncate" title="{{ $stage['stage'] }}">{{ $stage['stage'] }}</div>
+                            <div class="mt-3 text-2xl font-semibold text-neutral-950 truncate" title="{{ $stage['count'] }}">{{ $stage['count'] }}</div>
                         </div>
                     @endforeach
                 </div>
