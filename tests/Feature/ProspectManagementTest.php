@@ -25,6 +25,62 @@ class ProspectManagementTest extends TestCase
         }
     }
 
+    public function test_manager_can_view_pipeline_board_grouped_by_stage(): void
+    {
+        $manager = User::factory()->create(['role' => UserRole::Manager]);
+        $sales = User::factory()->create([
+            'name' => 'Rohan Sales',
+            'role' => UserRole::Sales,
+        ]);
+
+        Prospect::factory()->create([
+            'company_name' => 'PT Pipeline Baru',
+            'assigned_sales_id' => $sales->id,
+            'status' => 'new',
+            'priority' => 'high',
+            'estimated_vehicle_need' => 15,
+        ]);
+        Prospect::factory()->create([
+            'company_name' => 'PT Pipeline Menang',
+            'assigned_sales_id' => $sales->id,
+            'status' => 'won',
+        ]);
+
+        $this->actingAs($manager)
+            ->get('/prospects/pipeline')
+            ->assertOk()
+            ->assertSee('Pipeline Board')
+            ->assertSee('New')
+            ->assertSee('Won')
+            ->assertSee('PT Pipeline Baru')
+            ->assertSee('PT Pipeline Menang')
+            ->assertSee('Rohan Sales')
+            ->assertSee('15 vehicles');
+    }
+
+    public function test_sales_pipeline_board_only_shows_assigned_prospects(): void
+    {
+        $sales = User::factory()->create(['role' => UserRole::Sales]);
+        $otherSales = User::factory()->create(['role' => UserRole::Sales]);
+
+        Prospect::factory()->create([
+            'company_name' => 'PT Sales Visible',
+            'assigned_sales_id' => $sales->id,
+            'status' => 'meeting',
+        ]);
+        Prospect::factory()->create([
+            'company_name' => 'PT Sales Hidden',
+            'assigned_sales_id' => $otherSales->id,
+            'status' => 'meeting',
+        ]);
+
+        $this->actingAs($sales)
+            ->get('/prospects/pipeline')
+            ->assertOk()
+            ->assertSee('PT Sales Visible')
+            ->assertDontSee('PT Sales Hidden');
+    }
+
     public function test_sales_can_create_prospect(): void
     {
         $sales = User::factory()->create(['role' => UserRole::Sales]);
