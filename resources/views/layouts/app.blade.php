@@ -17,8 +17,8 @@
             $user = auth()->user();
             $navigation = [
                 ['label' => 'Dashboard', 'href' => route('dashboard'), 'active' => request()->routeIs('dashboard'), 'enabled' => true, 'roles' => ['admin', 'sales', 'manager', 'finance']],
-                ['label' => 'Prospects', 'href' => route('prospects.index'), 'active' => request()->routeIs('prospects.*'), 'enabled' => true, 'roles' => ['admin', 'sales', 'manager', 'finance']],
-                ['label' => 'Pipeline', 'href' => '#', 'active' => false, 'enabled' => false, 'roles' => ['admin', 'sales', 'manager']],
+                ['label' => 'Prospects', 'href' => route('prospects.index'), 'active' => request()->routeIs('prospects.index', 'prospects.create', 'prospects.show', 'prospects.edit', 'prospects.contacts.*', 'prospects.follow-ups.*'), 'enabled' => true, 'roles' => ['admin', 'sales', 'manager', 'finance']],
+                ['label' => 'Pipeline', 'href' => route('prospects.pipeline'), 'active' => request()->routeIs('prospects.pipeline'), 'enabled' => true, 'roles' => ['admin', 'sales', 'manager', 'finance']],
                 ['label' => 'Follow-ups', 'href' => route('follow-ups.today'), 'active' => request()->routeIs('follow-ups.*'), 'enabled' => true, 'roles' => ['admin', 'sales', 'manager']],
                 ['label' => 'Quotations', 'href' => route('quotations.index'), 'active' => request()->routeIs('quotations.*'), 'enabled' => true, 'roles' => ['admin', 'sales', 'manager', 'finance']],
                 ['label' => 'Vehicles', 'href' => route('vehicles.index'), 'active' => request()->routeIs('vehicles.*'), 'enabled' => true, 'roles' => ['admin', 'manager', 'finance']],

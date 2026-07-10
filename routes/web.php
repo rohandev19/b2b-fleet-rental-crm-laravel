@@ -66,6 +66,7 @@ Route::middleware(['auth', 'role:admin,manager,finance'])->group(function () {
 
 Route::middleware(['auth', 'role:admin,sales,manager,finance'])->group(function () {
     Route::get('/prospects', [ProspectController::class, 'index'])->name('prospects.index');
+    Route::get('/prospects/pipeline', [ProspectController::class, 'pipeline'])->name('prospects.pipeline');
 });
 
 Route::middleware(['auth', 'role:admin,sales'])->scopeBindings()->group(function () {
