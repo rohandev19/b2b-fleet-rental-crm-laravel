@@ -55,6 +55,7 @@ Milestones 1-11 complete. The project is ready for portfolio review, demo seedin
 - Dashboard includes pipeline snapshot, recent quotations, overdue follow-ups, and role-specific work queue.
 - Reports page added for Admin/Manager/Finance with period filters.
 - Reports cover prospect funnel, quotation status value, follow-up outcomes, and sales performance.
+- Reports can export period-filtered prospect and quotation data as CSV files.
 - Audit log table, logger service, and Admin/Manager audit log viewer added.
 - User, prospect, contact, follow-up, quotation approval, and PDF generation actions are audited.
 - Audit logs capture actor, action, record, changed values, IP address, and user agent.
@@ -124,7 +125,7 @@ This project is built milestone by milestone with small commits. Each milestone 
 6. Quotation draft and calculation service.
 7. Quotation approval workflow.
 8. Approved quotation PDF generation.
-9. Dashboard and reports.
+9. Dashboard, reports, and CSV exports.
 10. Audit log and security hardening.
 11. Testing, seeders, screenshots, and portfolio polish.
 
