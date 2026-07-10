@@ -11,6 +11,7 @@
 - Quotation action for marking approved generated quotations as sent.
 - Quotation outcome actions for marking sent quotations as accepted or declined.
 - Prospect pipeline status sync when quotations are accepted or declined.
+- Removed public tracking for local environment examples and internal project planning notes.
 
 ### Verification
 
