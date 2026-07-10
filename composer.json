@@ -36,7 +36,7 @@
     "scripts": {
         "setup": [
             "composer install",
-            "@php -r \"file_exists('.env') || copy('.env.example', '.env');\"",
+            "@php -r \"if (! file_exists('.env')) { fwrite(STDERR, 'Create a local .env file before running setup.'.PHP_EOL); exit(1); }\"",
             "@php artisan key:generate",
             "@php artisan migrate --force",
             "npm install",
@@ -58,7 +58,7 @@
             "@php artisan vendor:publish --tag=laravel-assets --ansi --force"
         ],
         "post-root-package-install": [
-            "@php -r \"file_exists('.env') || copy('.env.example', '.env');\""
+            "@php -r \"if (! file_exists('.env')) { fwrite(STDERR, 'Create a local .env file before running artisan commands.'.PHP_EOL); }\""
         ],
         "post-create-project-cmd": [
             "@php artisan key:generate --ansi",
