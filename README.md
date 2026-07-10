@@ -35,6 +35,7 @@ Milestones 1-11 complete. The project is ready for portfolio review, demo seedin
 - Follow-up activity timeline added to prospect detail.
 - Admin/Sales can add, edit, and delete follow-up activities.
 - Today and overdue follow-up reminder pages added.
+- Follow-up reminder digest command added for manual and scheduled checks.
 - Lost prospects reject new follow-up activities.
 - Vehicle master CRUD added with type, transmission, fuel, seat capacity, base monthly price, and active status.
 - Rental package CRUD added with duration and included services.
@@ -100,6 +101,22 @@ For active frontend development, run:
 npm run dev
 ```
 
+## Scheduled Jobs
+
+The CRM includes a follow-up reminder digest command:
+
+```bash
+php artisan crm:follow-up-reminders
+php artisan crm:follow-up-reminders --today
+php artisan crm:follow-up-reminders --overdue
+```
+
+Laravel's scheduler runs the default reminder digest daily at `08:00`. In production, configure the standard scheduler cron entry:
+
+```bash
+* * * * * php /path-to-project/artisan schedule:run >> /dev/null 2>&1
+```
+
 ## Demo Accounts
 
 All demo accounts use the password `password`.
@@ -120,7 +137,7 @@ This project is built milestone by milestone with small commits. Each milestone 
 1. Authentication and role-based dashboard layout.
 2. User management.
 3. Prospect and contact management.
-4. Follow-up activity tracking.
+4. Follow-up activity tracking and reminder digest.
 5. Vehicle and rental package masters.
 6. Quotation draft and calculation service.
 7. Quotation approval workflow.
