@@ -10,10 +10,11 @@
 - Daily scheduler registration for quotation expiry at `00:30`.
 - Quotation action for marking approved generated quotations as sent.
 - Quotation outcome actions for marking sent quotations as accepted or declined.
+- Prospect pipeline status sync when quotations are accepted or declined.
 
 ### Verification
 
-- Full PHPUnit feature/unit suite passed with 105 tests and 318 assertions.
+- Full PHPUnit feature/unit suite passed with 105 tests and 320 assertions.
 - Laravel Pint style check passed with `vendor/bin/pint --test`.
 - Production frontend build passed with `npm run build`.
 

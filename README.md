@@ -54,6 +54,7 @@ Milestones 1-11 complete. The project is ready for portfolio review, demo seedin
 - Admin/Sales/Manager/Finance can download generated approved quotation PDFs.
 - Admin/Sales/Manager can mark approved generated quotations as sent.
 - Admin/Sales/Manager can mark sent quotations as accepted or declined.
+- Accepted/declined quotation outcomes automatically sync the related prospect pipeline to won/lost.
 - Dashboard metrics now use live CRM, follow-up, and quotation data.
 - Dashboard includes pipeline snapshot, recent quotations, overdue follow-ups, and role-specific work queue.
 - Reports page added for Admin/Manager/Finance with period filters.
