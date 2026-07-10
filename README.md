@@ -2,9 +2,9 @@
 
 Laravel portfolio project for a B2B vehicle rental company. The application will cover CRM prospect tracking, PIC/contact management, sales follow-up, quotation drafting, manager approval, PDF quotation output, dashboard reporting, and audit logging.
 
-## Current Milestone
+## Project Status
 
-Milestone 11: Testing, seeders, screenshots, and portfolio polish.
+Milestones 1-11 complete. The project is ready for portfolio review, demo seeding, screenshots, and further extension.
 
 - Laravel 12 application scaffolded.
 - Laravel Breeze Blade authentication installed.
@@ -104,7 +104,7 @@ All demo accounts use the password `password`.
 
 This project is built milestone by milestone with small commits. Each milestone should be runnable and verified before moving to the next feature area.
 
-## Planned Milestones
+## Completed Milestones
 
 1. Authentication and role-based dashboard layout.
 2. User management.
@@ -117,3 +117,8 @@ This project is built milestone by milestone with small commits. Each milestone 
 9. Dashboard and reports.
 10. Audit log and security hardening.
 11. Testing, seeders, screenshots, and portfolio polish.
+
+## Portfolio Reference
+
+- Demo and screenshot guide: [`docs/portfolio.md`](docs/portfolio.md)
+- Release history: [`CHANGELOG.md`](CHANGELOG.md)
