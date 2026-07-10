@@ -111,7 +111,14 @@ php artisan crm:follow-up-reminders --today
 php artisan crm:follow-up-reminders --overdue
 ```
 
-Laravel's scheduler runs the default reminder digest daily at `08:00`. In production, configure the standard scheduler cron entry:
+The CRM can also expire quotations that are past their validity date:
+
+```bash
+php artisan crm:expire-quotations
+php artisan crm:expire-quotations --dry-run
+```
+
+Laravel's scheduler runs the default reminder digest daily at `08:00` and quotation expiry daily at `00:30`. In production, configure the standard scheduler cron entry:
 
 ```bash
 * * * * * php /path-to-project/artisan schedule:run >> /dev/null 2>&1
