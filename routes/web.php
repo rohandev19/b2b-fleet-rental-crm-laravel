@@ -104,6 +104,7 @@ Route::middleware(['auth', 'role:manager'])->group(function () {
 
 Route::middleware(['auth', 'role:admin,sales,manager'])->group(function () {
     Route::post('/quotations/{quotation}/generate-pdf', [QuotationPdfController::class, 'generate'])->name('quotations.generate-pdf');
+    Route::post('/quotations/{quotation}/mark-sent', [QuotationApprovalController::class, 'markSent'])->name('quotations.mark-sent');
 });
 
 Route::middleware(['auth', 'role:admin,sales,manager,finance'])->group(function () {
