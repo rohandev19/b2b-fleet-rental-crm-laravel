@@ -93,7 +93,7 @@ class ReportTest extends TestCase
         ]);
 
         $response = $this->actingAs($manager)
-            ->get('/reports/exports/prospects?start_date=2026-07-01&end_date=2026-07-31');
+            ->get('/reports/export/prospects?start_date=2026-07-01&end_date=2026-07-31');
 
         $response
             ->assertOk()
@@ -137,7 +137,7 @@ class ReportTest extends TestCase
         ]);
 
         $response = $this->actingAs($finance)
-            ->get('/reports/exports/quotations?start_date=2026-07-01&end_date=2026-07-31');
+            ->get('/reports/export/quotations?start_date=2026-07-01&end_date=2026-07-31');
 
         $response
             ->assertOk()
@@ -155,11 +155,24 @@ class ReportTest extends TestCase
         $sales = User::factory()->create(['role' => UserRole::Sales]);
 
         $this->actingAs($sales)
-            ->get('/reports/exports/prospects')
+            ->get('/reports/export/prospects')
             ->assertForbidden();
 
         $this->actingAs($sales)
-            ->get('/reports/exports/quotations')
+            ->get('/reports/export/quotations')
             ->assertForbidden();
+    }
+
+    public function test_legacy_export_urls_redirect_to_canonical_paths(): void
+    {
+        $manager = User::factory()->create(['role' => UserRole::Manager]);
+
+        $this->actingAs($manager)
+            ->get('/reports/exports/prospects?start_date=2026-07-01&end_date=2026-07-31')
+            ->assertRedirect('/reports/export/prospects?start_date=2026-07-01&end_date=2026-07-31');
+
+        $this->actingAs($manager)
+            ->get('/reports/exports/quotations?start_date=2026-07-01&end_date=2026-07-31')
+            ->assertRedirect('/reports/export/quotations?start_date=2026-07-01&end_date=2026-07-31');
     }
 }
