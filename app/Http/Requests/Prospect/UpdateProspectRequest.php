@@ -53,7 +53,7 @@ class UpdateProspectRequest extends FormRequest
             }
 
             if ($this->input('status') === 'won') {
-                $validator->errors()->add('status', 'Won status will be enabled after approved quotation workflow is available.');
+                $validator->errors()->add('status', 'Won status is set automatically when a sent quotation is accepted.');
             }
         });
     }
