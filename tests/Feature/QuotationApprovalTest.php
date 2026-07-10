@@ -128,4 +128,68 @@ class QuotationApprovalTest extends TestCase
             ->post("/quotations/{$quotation->id}/approve")
             ->assertSessionHasErrors('status');
     }
+
+    public function test_sales_can_mark_approved_generated_quotation_as_sent(): void
+    {
+        $sales = User::factory()->create(['role' => UserRole::Sales]);
+        $quotation = Quotation::factory()->create([
+            'sales_id' => $sales->id,
+            'status' => 'approved',
+            'pdf_path' => 'quotations/example.pdf',
+            'pdf_generated_at' => now(),
+        ]);
+
+        $this->actingAs($sales)
+            ->post("/quotations/{$quotation->id}/mark-sent")
+            ->assertRedirect(route('quotations.show', $quotation));
+
+        $this->assertDatabaseHas('quotations', [
+            'id' => $quotation->id,
+            'status' => 'sent',
+        ]);
+
+        $this->assertDatabaseHas('quotation_approvals', [
+            'quotation_id' => $quotation->id,
+            'user_id' => $sales->id,
+            'action' => 'mark_sent',
+            'from_status' => 'approved',
+            'to_status' => 'sent',
+        ]);
+
+        $this->assertDatabaseHas('audit_logs', [
+            'action' => 'quotation.sent',
+            'auditable_type' => Quotation::class,
+            'auditable_id' => $quotation->id,
+        ]);
+    }
+
+    public function test_quotation_requires_pdf_before_marking_as_sent(): void
+    {
+        $sales = User::factory()->create(['role' => UserRole::Sales]);
+        $quotation = Quotation::factory()->create([
+            'sales_id' => $sales->id,
+            'status' => 'approved',
+            'pdf_path' => null,
+        ]);
+
+        $this->actingAs($sales)
+            ->post("/quotations/{$quotation->id}/mark-sent")
+            ->assertSessionHasErrors('pdf_path');
+
+        $this->assertSame('approved', $quotation->fresh()->status);
+    }
+
+    public function test_finance_cannot_mark_quotation_as_sent(): void
+    {
+        $finance = User::factory()->create(['role' => UserRole::Finance]);
+        $quotation = Quotation::factory()->create([
+            'status' => 'approved',
+            'pdf_path' => 'quotations/example.pdf',
+            'pdf_generated_at' => now(),
+        ]);
+
+        $this->actingAs($finance)
+            ->post("/quotations/{$quotation->id}/mark-sent")
+            ->assertForbidden();
+    }
 }

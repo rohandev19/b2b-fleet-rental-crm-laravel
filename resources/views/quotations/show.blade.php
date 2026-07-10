@@ -35,6 +35,13 @@
                 @if ($quotation->status === 'approved' && $quotation->pdf_path && auth()->user()->hasRole(\App\Enums\UserRole::Admin, \App\Enums\UserRole::Sales, \App\Enums\UserRole::Manager, \App\Enums\UserRole::Finance))
                     <a href="{{ route('quotations.download-pdf', $quotation) }}" class="rounded-lg border border-neutral-300 bg-white px-4 py-2 text-sm font-semibold text-neutral-800 transition hover:bg-neutral-50">Download PDF</a>
                 @endif
+
+                @if ($quotation->status === 'approved' && $quotation->pdf_path && auth()->user()->hasRole(\App\Enums\UserRole::Admin, \App\Enums\UserRole::Sales, \App\Enums\UserRole::Manager))
+                    <form method="POST" action="{{ route('quotations.mark-sent', $quotation) }}">
+                        @csrf
+                        <button type="submit" class="rounded-lg bg-sky-600 px-4 py-2 text-sm font-semibold text-white transition hover:bg-sky-700">Mark as sent</button>
+                    </form>
+                @endif
             </div>
         </div>
 

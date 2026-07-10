@@ -62,6 +62,23 @@ class QuotationApprovalService
         return $this->transition($quotation, $user, 'reject', 'rejected', $reason);
     }
 
+    public function markSent(Quotation $quotation, User $user): Quotation
+    {
+        if ($quotation->status !== 'approved') {
+            throw ValidationException::withMessages([
+                'status' => 'Only approved quotations can be marked as sent.',
+            ]);
+        }
+
+        if (! $quotation->pdf_path) {
+            throw ValidationException::withMessages([
+                'pdf_path' => 'Generate the approved quotation PDF before marking it as sent.',
+            ]);
+        }
+
+        return $this->transition($quotation, $user, 'mark_sent', 'sent');
+    }
+
     private function transition(Quotation $quotation, User $user, string $action, string $toStatus, ?string $reason = null): Quotation
     {
         return DB::transaction(function () use ($quotation, $user, $action, $toStatus, $reason) {
